@@ -41,7 +41,21 @@ pipeline {
                 '''
             }
         }
-        
+        stage('Apply Kubernetes & Sync App with ArgoCD') {
+            steps {
+                withCredentials([string(credentialsId: 'argocd-token', variable: 'ARGO_TOKEN')]) {
+                sh '''
+                set -euo pipefail
+                # login via token (no prompts); grpc-web/insecure for NodePort without TLS
+                argocd login 35.184.177.230:30097 --auth-token "5TlCjsQqjtHfn-JR" --insecure --grpc-web
+
+                # sync and wait until healthy
+                argocd app sync gitopsappnew
+                argocd app wait gitopsappnew --health --sync
+            '''
+            }
+           }
+        }
     }
         
 }
