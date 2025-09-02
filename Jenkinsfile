@@ -41,6 +41,16 @@ pipeline {
                 '''
             }
         }
+
+
+        stage('Check Argo token credential') {
+            steps {
+            withCredentials([string(credentialsId: 'argocd-token', variable: 'ARGO_TOKEN')]) {
+            sh 'echo "ARGO token available"'
+             }
+           }
+        }
+
         stage('Apply Kubernetes & Sync App with ArgoCD') {
             steps {
                 withCredentials([string(credentialsId: 'argocd-token', variable: 'ARGO_TOKEN')]) {
