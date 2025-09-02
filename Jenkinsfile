@@ -56,14 +56,15 @@ pipeline {
                 withCredentials([string(credentialsId: 'argocd-token', variable: 'ARGO_TOKEN')]) {
                 sh '''
                 set -eu
-                # login via token (no prompts); grpc-web/insecure for NodePort without TLS
-                argocd login 35.184.177.230:30097 --auth-token "5TlCjsQqjtHfn-JR" --insecure --grpc-web
+                 export ARGOCD_SERVER="35.184.177.230:30097"
+                 export ARGOCD_AUTH_TOKEN="$ARGO_TOKEN"
+                 ARGS="--insecure --grpc-web"
 
-                # sync and wait until healthy
-                argocd app sync gitopsappnew
-                argocd app wait gitopsappnew --health --sync
-            '''
-            }
+                 # Sync and wait until healthy
+                 argocd $ARGS app sync gitopsappnew
+                 argocd $ARGS app wait gitopsappnew --health --sync
+                '''
+                }
            }
         }
     }
