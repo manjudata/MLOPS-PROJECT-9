@@ -55,7 +55,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'argocd-token', variable: 'ARGO_TOKEN')]) {
                 sh '''
-                set -euo pipefail
+                set -eu
                 # login via token (no prompts); grpc-web/insecure for NodePort without TLS
                 argocd login 35.184.177.230:30097 --auth-token "5TlCjsQqjtHfn-JR" --insecure --grpc-web
 
