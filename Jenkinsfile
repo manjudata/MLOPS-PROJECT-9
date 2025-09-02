@@ -51,7 +51,7 @@ pipeline {
            }
         }
 
-        stage('Apply Kubernetes & Sync App with ArgoCD') {
+        stage('Apply Kubernetes & Sync App with ArgoCD webhook updated') {
             steps {
                 withCredentials([string(credentialsId: 'argocd-token', variable: 'ARGO_TOKEN')]) {
                 sh '''
